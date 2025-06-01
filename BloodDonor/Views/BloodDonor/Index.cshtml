@@ -1,1 +1,67 @@
-<h2>Blood Donor Index Page</h2>
+@model List<BloodDonorEntity>
+
+@{
+    ViewData["Title"] = "Blood Donor List";
+}
+
+<h2>Blood Donor List</h2>
+
+<form method="get" class="row g-2 mb-3">
+    <div class="col-md-4">
+        <select name="bloodGroup" class="form-select">
+            <option value="">All Blood Groups</option>
+            @foreach (var bg in Enum.GetNames(typeof(BloodGroup)))
+            {
+                <option value="@bg">@bg</option>
+            }
+        </select>
+    </div>
+    <div class="col-md-4">
+        <input type="text" name="address" class="form-control" placeholder="Search by Address" />
+    </div>
+    <div class="col-md-4">
+        <button type="submit" class="btn btn-primary w-100">Search</button>
+    </div>
+</form>
+
+<table class="table table-bordered p-2">
+    <thead>
+        <tr>
+            <th>Picture</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Address</th>
+            <th>Age</th>
+            <th>Weight(KG)</th>
+            <th>Blood Group</th>
+            <th>Last Donation</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var data in Model)
+        {
+            <tr>
+                @if (data.ProfilePicture != null)
+                {
+                    <td>
+                        <img src=@data.ProfilePicture alt="Profile" width="60px" height="60px" class="rounded-circle"
+                            style="object-fit: cover" />
+                    </td>
+                }
+                else
+                {
+                    <td>No Picture</td>
+                }
+                <td>@data.FullName</td>
+                <td>@data.Email</td>
+                <td>@data.ContactNumber</td>
+                <td>@data.Address</td>
+                <td>@data.DateOfBirth</td>
+                <td>@data.Weight</td>
+                <td>@data.BloodGroup</td>
+                <td>@data.LastDonationDate</td>
+            </tr>
+        }
+    </tbody>
+</table>

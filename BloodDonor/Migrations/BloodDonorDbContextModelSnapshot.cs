@@ -22,7 +22,7 @@ namespace BloodDonor.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("BloodDonor.Models.BloodDonor", b =>
+            modelBuilder.Entity("BloodDonor.Models.BloodDonorEntity", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -31,28 +31,35 @@ namespace BloodDonor.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Address")
-                        .HasColumnType("text");
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<int>("BloodGroup")
                         .HasColumnType("integer");
 
                     b.Property<string>("ContactNumber")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(15)
+                        .HasColumnType("character varying(15)");
 
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
 
-                    b.Property<DateTime>("LastDonationDate")
+                    b.Property<DateTime?>("LastDonationDate")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("ProfilePicture")
+                        .HasColumnType("text");
 
                     b.Property<float>("Weight")
                         .HasColumnType("real");
@@ -70,6 +77,9 @@ namespace BloodDonor.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
+                    b.Property<int?>("BloodDonorEntityId")
+                        .HasColumnType("integer");
+
                     b.Property<int>("BloodDonorId")
                         .HasColumnType("integer");
 
@@ -78,21 +88,19 @@ namespace BloodDonor.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BloodDonorId");
+                    b.HasIndex("BloodDonorEntityId");
 
                     b.ToTable("Donations");
                 });
 
             modelBuilder.Entity("BloodDonor.Models.Donation", b =>
                 {
-                    b.HasOne("BloodDonor.Models.BloodDonor", null)
+                    b.HasOne("BloodDonor.Models.BloodDonorEntity", null)
                         .WithMany("Donations")
-                        .HasForeignKey("BloodDonorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("BloodDonorEntityId");
                 });
 
-            modelBuilder.Entity("BloodDonor.Models.BloodDonor", b =>
+            modelBuilder.Entity("BloodDonor.Models.BloodDonorEntity", b =>
                 {
                     b.Navigation("Donations");
                 });
